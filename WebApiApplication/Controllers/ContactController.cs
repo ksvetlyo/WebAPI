@@ -4,13 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 using WebApiApplication.Models;
 
 namespace WebApiApplication.Controllers
 {
     public class ContactController : ApiController
     {
-
         Contact[] contacts = {
             new Contact() {Id = 0, FirstName = "Peter", LastName = "Markov"},
             new Contact() {Id = 1, FirstName = "Bruce", LastName = "Wayne"},
@@ -35,8 +35,14 @@ namespace WebApiApplication.Controllers
         }
 
         // POST: api/Contact
-        public void Post([FromBody]string value)
+        public IEnumerable<Contact> Post([FromBody]Contact newContact)
         {
+            List<Contact> contactList = contacts.ToList();
+            newContact.Id = contactList.Count;
+            contactList.Add(newContact);
+            contacts = contactList.ToArray();
+
+            return contacts;
         }
 
         // PUT: api/Contact/5

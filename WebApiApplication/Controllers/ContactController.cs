@@ -50,6 +50,7 @@ namespace WebApiApplication.Controllers
         }
 
         [HttpPost]
+        [Route("api/Contact")]
         public IEnumerable<Contact> Post([FromBody]Contact newContact)
         {
             List<Contact> contactList = contacts.ToList();
@@ -62,6 +63,7 @@ namespace WebApiApplication.Controllers
         }
 
         [HttpPut]
+        [Route("api/Contact/{id:int}")]
         public IEnumerable<Contact> Put(int id, [FromBody]Contact updatedContact)
         {
             Contact contact = contacts.FirstOrDefault<Contact>(c => c.Id == id);
@@ -75,6 +77,7 @@ namespace WebApiApplication.Controllers
         }
 
         [HttpDelete]
+        [Route("api/Contact/{id:int}")]
         public IEnumerable<Contact> Delete(int id)
         {
             Contact contact = contacts.FirstOrDefault<Contact>(c => c.Id == id);

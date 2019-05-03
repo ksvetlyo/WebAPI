@@ -9,6 +9,7 @@ using WebApiApplication.Models;
 
 namespace WebApiApplication.Controllers
 {
+    [RoutePrefix("api/Contact")]
     public class ContactController : ApiController
     {
         Contact[] contacts = {
@@ -20,14 +21,14 @@ namespace WebApiApplication.Controllers
         };
 
         [HttpGet]
-        [Route("api/Contact")]
+        [Route("")]
         public IEnumerable<Contact> Get()
         {
             return contacts;
         }
 
         [HttpGet]
-        [Route("api/Contact/{id:int}")]
+        [Route("{id:int}")]
         public IHttpActionResult Get(int id)
         {
             Contact contact = contacts.FirstOrDefault(c => c.Id == id);
@@ -41,7 +42,7 @@ namespace WebApiApplication.Controllers
         }
 
         [HttpGet]
-        [Route("api/Contact/{name}")]
+        [Route("{name}")]
         public IEnumerable<Contact> GetContactByName(string name)
         {
             Contact[] contactArray = contacts.Where<Contact>(c => c.FirstName.Contains(name)).ToArray();
@@ -50,7 +51,7 @@ namespace WebApiApplication.Controllers
         }
 
         [HttpPost]
-        [Route("api/Contact")]
+        [Route("")]
         public IEnumerable<Contact> Post([FromBody]Contact newContact)
         {
             List<Contact> contactList = contacts.ToList();
@@ -63,7 +64,7 @@ namespace WebApiApplication.Controllers
         }
 
         [HttpPut]
-        [Route("api/Contact/{id:int}")]
+        [Route("{id:int}")]
         public IEnumerable<Contact> Put(int id, [FromBody]Contact updatedContact)
         {
             Contact contact = contacts.FirstOrDefault<Contact>(c => c.Id == id);
@@ -77,7 +78,7 @@ namespace WebApiApplication.Controllers
         }
 
         [HttpDelete]
-        [Route("api/Contact/{id:int}")]
+        [Route("{id:int}")]
         public IEnumerable<Contact> Delete(int id)
         {
             Contact contact = contacts.FirstOrDefault<Contact>(c => c.Id == id);

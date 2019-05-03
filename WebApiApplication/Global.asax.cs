@@ -12,6 +12,7 @@ namespace WebApiApplication
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            Console.WriteLine("test");
         }
     }
 }

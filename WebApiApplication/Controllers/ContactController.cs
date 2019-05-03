@@ -11,13 +11,12 @@ namespace WebApiApplication.Controllers
     public class ContactController : ApiController
     {
 
-        Contact[] contacts = new Contact[]
-        {
+        Contact[] contacts = {
             new Contact() {Id = 0, FirstName = "Peter", LastName = "Markov"},
-            new Contact() {Id = 0, FirstName = "Bruce", LastName = "Wayne"},
-            new Contact() {Id = 0, FirstName = "Tony", LastName = "Stark"}
+            new Contact() {Id = 1, FirstName = "Bruce", LastName = "Wayne"},
+            new Contact() {Id = 2, FirstName = "Tony", LastName = "Stark"}
         };
-
+            
         // GET: api/Contact
         public IEnumerable<Contact> Get()
         {
@@ -25,9 +24,14 @@ namespace WebApiApplication.Controllers
         }
 
         // GET: api/Contact/5
-        public string Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return "value";
+            Contact contact = contacts.FirstOrDefault<Contact>(c => c.Id == id);
+            if (contact == null)
+            {
+                return NotFound();
+            }
+            return Ok(contact);
         }
 
         // POST: api/Contact

@@ -12,32 +12,48 @@ namespace WebApiApplication.Controllers
     public class ContactController : ApiController
     {
         Contact[] contacts = {
-            new Contact() {Id = 0, FirstName = "Peter", LastName = "Markov"},
-            new Contact() {Id = 1, FirstName = "Bruce", LastName = "Wayne"},
-            new Contact() {Id = 2, FirstName = "Tony", LastName = "Stark"}
+            new Contact() {Id = 0, FirstName = "Peter", LastName = "Parker"},
+            new Contact() {Id = 1, FirstName = "Bruce", LastName = "Banner"},
+            new Contact() {Id = 2, FirstName = "Tony", LastName = "Stark"},
+            new Contact() {Id = 3, FirstName = "Stephen", LastName = "Strange"},
+            new Contact() {Id = 4, FirstName = "Natasha", LastName = "Romanoff"}
         };
-            
-        // GET: api/Contact
+
+        [HttpGet]
+        [Route("api/Contact")]
         public IEnumerable<Contact> Get()
         {
             return contacts;
         }
 
-        // GET: api/Contact/5
+        [HttpGet]
+        [Route("api/Contact/{id:int}")]
         public IHttpActionResult Get(int id)
         {
-            Contact contact = contacts.FirstOrDefault<Contact>(c => c.Id == id);
+            Contact contact = contacts.FirstOrDefault(c => c.Id == id);
+
             if (contact == null)
             {
                 return NotFound();
             }
+
             return Ok(contact);
         }
 
-        // POST: api/Contact
+        [HttpGet]
+        [Route("api/Contact/{name}")]
+        public IEnumerable<Contact> GetContactByName(string name)
+        {
+            Contact[] contactArray = contacts.Where<Contact>(c => c.FirstName.Contains(name)).ToArray();
+
+            return contactArray;
+        }
+
+        [HttpPost]
         public IEnumerable<Contact> Post([FromBody]Contact newContact)
         {
             List<Contact> contactList = contacts.ToList();
+
             newContact.Id = contactList.Count;
             contactList.Add(newContact);
             contacts = contactList.ToArray();
@@ -45,14 +61,35 @@ namespace WebApiApplication.Controllers
             return contacts;
         }
 
-        // PUT: api/Contact/5
-        public void Put(int id, [FromBody]string value)
+        [HttpPut]
+        public IEnumerable<Contact> Put(int id, [FromBody]Contact updatedContact)
         {
+            Contact contact = contacts.FirstOrDefault<Contact>(c => c.Id == id);
+
+            if (contact != null)
+            {
+                contact.FirstName = updatedContact.FirstName;
+                contact.LastName = updatedContact.LastName;
+            }
+            return contacts;
         }
 
-        // DELETE: api/Contact/5
-        public void Delete(int id)
+        [HttpDelete]
+        public IEnumerable<Contact> Delete(int id)
         {
+            Contact contact = contacts.FirstOrDefault<Contact>(c => c.Id == id);
+
+            List<Contact> contactList = contacts.ToList();
+
+            var itemToRemove = contactList.Single(r => r.Id == contact.Id);
+
+            if (contact != null)
+            {           
+                contactList.Remove(itemToRemove);
+                contacts = contactList.ToArray();
+            }
+
+            return contacts;
         }
     }
 }

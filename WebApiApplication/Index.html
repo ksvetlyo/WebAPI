@@ -6,23 +6,29 @@
     <title></title>
 </head>
 <body>
+    Enter Name or Id: <input type="text" id="searchBY" />
+    <button onclick="searchContact()">Search</button>
 
-    <div>
-        Enter Id: <input type="text" id="searchID" />
-        <button onclick="searchContact()">Search</button>
-    </div>
+    <button onclick="addContact()">Add contact</button>
 
-    <div>
-        <button onclick="addContact()">Add contact</button>
-    </div>
+    <button onclick="updateContact()">Update contact</button>
+
 
     <script type="text/javascript">
 
+        $(document).ready(function () {
+            $.getJSON("api/Contact",
+                function (result) {
+                    console.info(result);
+                });
+        });
+
         function searchContact() {
+
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: "api/Contact/" + $("#searchID").val(),
+                url: "api/Contact/" + $("#searchBY").val(),
                 success: function (result) {
                     console.info(result);
                 }
@@ -30,11 +36,13 @@
         };
 
         function addContact() {
+
             var newContact = {
                 "Id": 0,
-                "FirstName": "Anton",
-                "LastName": "Hristov"
+                "FirstName": "Chris",
+                "LastName": "Evans"
             }
+
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -43,9 +51,27 @@
                 success: function (result) {
                     console.info(result);
                 }
+            });
+        };
 
+        function updateContact() {
+
+            var updatedContact = {
+                "FirstName": "Steve",
+                "LastName": "Rogers"
+            }
+
+            $.ajax({
+                type: "PUT",
+                dataType: "json",
+                url: "api/Contact/0",
+                data: updatedContact,
+                success: function (result) {
+                    console.info(result);
+                }
             });
         }
+
     </script>
 </body>
 </html>
